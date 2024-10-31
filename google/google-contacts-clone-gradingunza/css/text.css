@@ -1,0 +1,31 @@
+.title {
+  color: var(--text-color);
+  font-style: normal;
+}
+
+.title span {
+  font-size: 1rem;
+  font-weight: 800;
+  text-decoration: wavy;
+}
+
+.title-level-1 {
+  font-size: 1.7rem;
+  font-weight: 400;
+}
+
+.title-level-2 {
+  font-size: 1rem;
+}
+
+.title-level-3 {
+  font-size: 0.95rem;
+}
+
+.text {
+  color: var(--text-color);
+}
+
+.text-align-center {
+  text-align: center;
+}

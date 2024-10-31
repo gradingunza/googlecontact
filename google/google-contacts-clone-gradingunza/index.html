@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css" />
+    <title>Google Contacts</title>
+    <style>
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: orange;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+
+        #contactTable {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            text-align: center;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .modal-backdrop {
+            opacity: 0;
+        }
+        .modal {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .btn-close {
+        font-size: 1.5rem;
+        color: #6c757d;
+    }
+    .btn-outline-primary {
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .btn-outline-primary:hover {
+        background-color: red;
+        color: white;
+    }
+
+    #phoneFlag {
+    background-color: transparent; /* Fond transparent */
+    border: none; /* Pas de bordure */
+    text-align: center;
+}
+
+.label-item {
+    background-color: #f1f1f1; /* Couleur de fond */
+    border-radius: 5px; /* Coins arrondis */
+    padding: 5px 10px; /* Espacement */
+    margin: 5px 0; /* Espacement vertical */
+    display: inline-block; /* Affichage en ligne */
+}
+    </style>
+</head>
+<body class="bg-page-full">
+    <header class="flex padding-container justify-s-between sd-padding-container">
+        <div class="flex justify-s-between items-center w-8">
+            <div id="burger-menu" class="pointer icon transition">
+                <span class="material-symbols-outlined"> Menu</span>
+            </div>
+            <div class="w-4rem">
+                <img src="assets/images/logo.png" alt="Google contact logo" />
+            </div>
+            <h1 class="title title-level-1">Contacts <span id="contactCount">(0)</span></h1>
+        </div>
+        <div class="w-90 md-w-70 flex justify-start items-center md-justify-flex-end">
+            <div class="flex input-field items-center">
+                <div class="pointer icon justify-center items-center">
+                    <span class="material-symbols-outlined"> search </span>
+                </div>
+                <input type="text" name="searchInput" id="searchInput" placeholder="Recherche" class="form-control" />
+            </div>
+        </div>
+    </header>
+
+    <main class="flex padding-container justify-s-between">
+        <section id="side-bar" class="w-15 md-display-none">
+            <div>
+                <button type="button" class="button flex items-center contain button-radius-07 button-hover-shadow" onclick="openContactModal();">
+                    <span class="material-symbols-outlined margin-right-04rem"> add </span>
+                    Créer un contact
+                </button>
+            </div>
+            <div class="padding-top-bottom-1rem">
+                <button type="button" class="button justify-s-between flex items-center button-hover-bg-color button-radius-10 w-100">
+                    <p class="flex items-center justify-s-between">
+                        <span class="material-symbols-outlined margin-right-04rem"> person </span>
+                        Contact
+                    </p>
+                    <span id="contactCountSidebar">0</span>
+                </button>
+                <button type="button" class="button flex items-center button-hover-bg-color button-radius-10 w-100 margin-top-bottom-1rem">
+                    <span class="material-symbols-outlined margin-right-04rem"> history </span>Fréquents
+                </button>
+            </div>
+            <div>
+              <div class="flex justify-s-between items-center">
+                  <h3 class="text title-level-3">Libellés</h3>
+                  <div class="pointer icon transition" id="addLabelButton" onclick="openLabelModal();">
+                      <span class="material-symbols-outlined"> add </span>
+                  </div>
+              </div>
+              <div id="labelsContainer">
+                  <ul class="list-unstyled" id="labelsList">
+                      <!-- Les libellés seront ici -->
+                  </ul>
+              </div>
+          </div>
+        </section>
+        <section id="main-section" class="w-90 main-section md-w-100">
+            <h3 class="title title-level-1">Contacts <span id="contactCountHeader">(0)</span></h3>
+            <div class="contact-container d-flex justify-content-center align-items-center flex-column" id="noContactsContainer">
+                <div class="text-center illus-size-2rem" id="emptyContacts">
+                    <img src="./assets/illustrations/emptycontacts_animation_cell4.png" alt="Empty contact illustration" class="img-fluid" />
+                    <p class="text text-align-center" id="noContactsText">Aucun contact</p>
+                </div>
+                <div class="flex justify-center items-center margin-top-bottom-1rem" id="createContactContainer">
+                    <button type="button" class="button flex items-center contain button-radius-07 button-hover-shadow" onclick="openContactModal();">
+                        <span class="material-symbols-outlined margin-right-04rem"> add </span>
+                        Créer un contact
+                    </button>
+                </div>
+            </div>
+            <table class="table table-striped" id="contactTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>E-mail</th>
+                        <th>Téléphone</th>
+                        <th>Fonction & Entreprise</th>
+                        <th>Libellés</th>
+                        <th>voir plus</th>
+                    </tr>
+                </thead>
+                <tbody id="contact-list">
+                    <!-- Les contacts seront ici -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- Modal pour créer/modifier un contact -->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header bg-light text-dark" style="padding: 0.5rem 1rem;">
+          <h5 class="modal-title" id="contactModalLabel" style="font-size: 1.2rem;">Créer un Contact</h5>
+          <button type="button" class="btn-close" aria-label="Close" style="border: none; background: none;"></button>
+          <button type="button" class="btn btn-secondary btn-sm" id="addLabelButtonUnique">Libellé +</button> <!-- ID modifié -->
+      </div>
+      
+      
+      
+
+      <div id="labelContainer"></div> <!-- Conteneur pour les libellés -->
+      
+          <div class="modal-body">
+              <form id="contactForm">
+                  <div class="mb-3">
+                      <div class="input-group">
+                          <span class="input-group-text"><span class="material-symbols-outlined"> person </span></span>
+                          <input type="text" class="form-control" id="firstName" placeholder="Prénom" required>
+                      </div>
+                  </div>
+                  <div class="mb-3">
+                      <div class="input-group">
+                          <span class="input-group-text"><span class="material-symbols-outlined"> person </span></span>
+                          <input type="text" class="form-control" id="lastName" placeholder="Nom" required>
+                      </div>
+                  </div>
+                  <div class="mb-3">
+                      <div class="input-group">
+                          <span class="input-group-text"><span class="material-symbols-outlined"> business </span></span>
+                          <input type="text" class="form-control" id="company" placeholder="Entreprise">
+                      </div>
+                  </div>
+                  <div class="mb-3">
+                      <div class="input-group">
+                          <span class="input-group-text"><span class="material-symbols-outlined"> work </span></span>
+                          <input type="text" class="form-control" id="position" placeholder="Fonction">
+                      </div>
+                  </div>
+                  <div class="mb-3">
+                      <div class="input-group">
+                          <span class="input-group-text"><span class="material-symbols-outlined"> mail </span></span>
+                          <input type="email" class="form-control" id="email" placeholder="E-mail" required>
+                      </div>
+                  </div>
+                  <div class="mb-3 text-center">
+                      <button type="button" class="btn btn-outline-primary" id="addEmailButton">+ Ajouter une adresse e-mail</button>
+                  </div>
+                  <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text"><span class="material-symbols-outlined"> phone </span></span>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="phoneFlag" style="padding: 0; border: none;">
+                                <img src="assets/images (1).png" alt="Drapeau" style="width: 30px; height: 30px;">
+                            </span>
+                        </div>
+                        <input type="tel" class="form-control" id="phone" placeholder="Téléphone" >
+                    </div>
+                </div>
+                
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="button" class="btn btn-primary" id="saveContactButton">Enregistrer</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Modal pour créer un nouveau Libellé -->
+<div class="modal fade" id="labelModal" tabindex="-1" aria-labelledby="labelModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="labelModalLabel">Créer un Libellé</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <input type="text" class="form-control" id="labelName" placeholder="Nom du Libellé" required>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="button" class="btn btn-primary" id="saveLabelButton">Enregistrer</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Modale pour choisir un Libellé -->
+<div class="modal fade" id="labelChoiceModal" tabindex="-1" aria-labelledby="labelChoiceModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="labelChoiceModalLabel">Choisir un Libellé</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <div id="labelList"></div>
+              <input type="text" id="newLabelInput" class="form-control mt-2" placeholder="Créer un nouveau libellé" />
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="button" class="btn btn-primary" id="saveNewLabelButton">Sauvegarder</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<!-- Modal de résumé -->
+<div class="modal fade" id="contactSummaryModal" tabindex="-1" aria-labelledby="contactSummaryModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="contactSummaryModalLabel">Détails du Contact</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <p id="contactSummary"></p>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-warning" id="editButton">Modifier</button>
+              <button type="button" class="btn btn-danger" id="deleteButton">Supprimer</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+    
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/index.js"></script>
+    
+
+</body>
+
+
+</html>

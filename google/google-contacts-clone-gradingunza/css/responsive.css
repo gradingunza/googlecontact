@@ -1,0 +1,31 @@
+@media only screen and (max-width: 1024px) {
+  .md-justify-s-between {
+    justify-content: space-between;
+  }
+
+  .md-justify-flex-end {
+    justify-content: flex-end;
+  }
+
+  .md-display-none {
+    display: none;
+  }
+
+  .md-w-100 {
+    width: 100%;
+  }
+
+  .md-w-70 {
+    width: 70%;
+  }
+
+  .md-display-block {
+    display: block;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .sd-padding-container {
+    padding: 1rem 0.5rem;
+  }
+}

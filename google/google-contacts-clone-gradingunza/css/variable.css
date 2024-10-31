@@ -1,0 +1,17 @@
+:root {
+  --primary-light-color: #b7dcfa;
+  --primary-color: #0b57d0;
+  --hover-color-component: #e6edfa;
+  --hover-color-icon: #e9ebed;
+  --text-color: #5f6368;
+
+  --background-color: #f8fafd;
+  --white: #fff;
+
+  --transition: all 0.5s ease-in-out;
+  --font-family: "Roboto", sans-serif;
+
+  --border-radius: 5px;
+
+  --shadow: -6px 10px 11px -2px rgba(161, 161, 161, 1);
+}
